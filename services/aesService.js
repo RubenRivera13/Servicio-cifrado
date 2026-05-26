@@ -5,7 +5,7 @@ const IV_LENGTH = 12;
 
 const key = Buffer.from(process.env.AES_SECRET_KEY, 'utf8');
 
-function encrypt(text){
+function encrypt(text) {
 
     const iv = crypto.randomBytes(IV_LENGTH);
 
@@ -16,7 +16,7 @@ function encrypt(text){
 
     const authTag = cipher.getAuthTag();
 
-    return{
+    return {
         encrypted,
         iv: iv.toString('hex'),
         authTag: authTag.toString('hex')
@@ -24,20 +24,28 @@ function encrypt(text){
 
 }
 
-function decrypt(encryptedText, ivHex, authTagHex){
+function decrypt(encryptedText, ivHex, authTagHex) {
 
     const iv = Buffer.from(ivHex, 'hex');
     const authTag = Buffer.from(authTagHex, 'hex');
 
-    const decipher = crypto.createCipheriv(ALGORITHM, key, iv);
+    const decipher = crypto.createDecipheriv(
+        ALGORITHM,
+        key,
+        iv
+    );
 
     decipher.setAuthTag(authTag);
 
-    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    let decrypted = decipher.update(
+        encryptedText,
+        'hex',
+        'utf8'
+    );
+
     decrypted += decipher.final('utf8');
 
     return decrypted;
-
 }
 
 module.exports = {

@@ -6,13 +6,13 @@ function sha256(req, res){
 
     if(!text){
         return res.status(400).json({
-            error: 'tetx is required'
+            error: 'text is required'
         });
     }
 
     const hash = hashService.sha256(text);
 
-    return res.status(200).json({ has });
+    return res.status(200).json({ hash });
 
 }
 
